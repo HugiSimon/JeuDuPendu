@@ -1,0 +1,226 @@
+//BUT Jouer au pendu
+//ENTRE Un mot, et puis des lettres à chaque tour
+//SORTIE Une victoire ou une défaite, et du FUN
+
+CONST MAX <- 11
+
+PROCEDURE longeurMot (VAR n_i : ENTIER ; s_mot : CHAINE)
+
+	DEBUT
+
+		n_i <- longeur(s_mot)
+
+	FINPROCEDURE
+
+
+PROCEDURE demanderMot (VAR s_mot, VAR s_mot2 : CHAINE)
+
+	VAR n_i, n_j : ENTIER
+
+	DEBUT
+
+		REPETER
+
+			ECRIRE "Ecrire un mot de pas de plus de " + MAX-1 + "caractere"
+			LIRE s_mot
+
+		JUSQU'A (longeur(s_mot) > MAX-1)
+
+		longeurMot(n_i, s_mot)
+
+		POUR n_j de 0 à n_i FAIRE PAS DE 1
+
+			s_mot2[n_j] <- s_mot[n_j]
+
+		FINPOUR
+
+	FINPROCEDURE
+
+
+PROCEDURE ecrirePendu (n_vie : ENTIER)
+
+	DEBUT
+
+		system("cls")
+
+		SI (n_vie >= 3)
+		ALORS
+			ECRIRE "______"
+		FINSI
+
+		ECRIRE "\n"
+
+		SI (n_vie >= 2)
+		ALORS
+			ECRIRE " |"
+
+			SI (n_vie >= 4)
+			ALORS
+				ECRIRE "    |"
+			FINSI
+		FINSI
+
+		ECRIRE "\n"
+
+		SI (n_vie >= 2)
+		ALORS
+			ECRIRE " |"
+
+			SI (n_vie >= 5)
+			ALORS
+				ECRIRE "    o"
+			FINSI
+		FINSI
+
+		ECRIRE "\n"
+
+		SI (n_vie >= 2)
+		ALORS
+			ECRIRE " |"
+
+			SI (n_vie >= 6)
+			ALORS
+				ECRIRE "   /"
+
+				SI (n_vie >= 7)
+				ALORS
+					ECRIRE "|"
+
+					SI (n_vie >= 8)
+					ALORS
+						ECIRE "\"
+					FINSI
+				FINSI
+			FINSI
+		FINSI
+
+		ECRIRE "\n"
+
+		SI (n_vie >= 2)
+		ALORS
+			ECRIRE " |"
+
+			SI (n_vie >= 9)
+			ALORS
+				ECRIRE "   /"
+
+				SI (n_vie >= 10)
+				ALORS
+					ECRIRE "\"
+				FINSI
+			FINSI
+		FINSI
+
+		ECRIRE "\n"
+
+		SI (n_vie >= 1)
+		ALORS
+			ECRIRE "_|_"
+		FINSI
+
+		ECRIRE "\n\n"
+
+	FINPROCEDURE
+
+
+PROCEDURE ecrireMot (s_mot, s_mot2 : CHAINE)
+
+	VAR n_k, n_j, n_i : ENTIER
+		c_lettre : CARACTERE
+
+	DEBUT
+
+		longeurMot(n_i, s_mot)
+		n_k <- 0
+
+		POUR n_j de 0 à n_i FAIRE PAS DE 1
+
+			c_lettre <- s_mot2[n_j]
+
+			SI (c_lettre = '*')
+			ALORS
+				ECRIRE s_mot[n_j]
+			SINON
+				ECRIRE "_ "
+				n_k <- n_k + 1
+			FINSI
+		FINPOUR
+
+		SI (n_k <= 0)
+		ALORS
+			ECRIRE "\n\n Bravo c'est gagne !!! \n"
+			exit(0)
+		FINSI
+
+	FINPROCEDURE
+
+
+PROCEDURE lireLettre (VAR n_k : ENTIER ; s_mot, s_mot2 : CHAINE)
+
+	VAR n_j, n_i : ENTIER
+		c_lettre : CHAINE
+
+	DEBUT
+
+		longeurMot(n_i, s_mot)
+
+		ECRIRE "\n Donne une lettre \n"
+		LIRE c_lettre
+
+		n_k <- 0
+
+		POUR n_j de 0 à n_i FAIRE PAS DE 1
+
+			SI (c_lettre = s_mot2[n_j])
+			ALORS
+
+				s_mot2[n_j] <- '*'
+				n_k <- 1
+
+			FINSI
+		FINPOUR
+
+	FINPROCEDURE
+
+
+PROCEDURE comptageVie (n_k, VAR n_vie, VAR etat : ENTIER)
+
+	DEBUT
+
+		SI (n_k == 0)
+		ALORS
+			n_vie <- n_vie + 1
+
+			SI (n_vie == 11)
+			ALORS
+				etat = 1
+			FINPOUR
+		FINPOUR
+
+	FINPROCEDURE
+
+//Programme principal
+
+VAR s_mot[MAX], s_mot2[MAX] : CHAINE
+	c_lettre : CARACTERE
+	etat, n_vie, n_k : ENTIER
+
+DEBUT
+
+	demanderMot(s_mot, s_mot2)
+
+	TANT QUE (etat == 0)
+
+		ecrirePendu(n_vie)
+
+		ecrireMot(s_mot, s_mot2)
+
+		lireLettre(n_k, s_mot, s_mot2)
+
+		comptageVie(n_k, n_vie, etat)
+
+	FINTANTQUE
+
+	ECRIRE "Le mot était " + s_mot
+
+FIN
